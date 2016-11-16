@@ -1972,11 +1972,11 @@
 
 			body {
 				min-width: 960px;
-				font-size: 11pt;
+				font-size: 12pt;
 			}
 
 			input, textarea, select {
-				font-size: 11pt;
+				font-size: 12pt;
 			}
 
 			header {
@@ -2017,7 +2017,7 @@
 
 			body, input, textarea, select {
 				line-height: 1.75em;
-				font-size: 10pt;
+				font-size: 12pt;
 				letter-spacing: 0;
 			}
 
