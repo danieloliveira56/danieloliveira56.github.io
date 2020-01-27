@@ -1,0 +1,535 @@
+
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <script type="text/javascript" src="./js/d3.js"></script>
+  <script type="text/javascript" src="./js/d3.geo.js"></script>
+  <script type="text/javascript" src="./js/jquery-1.11.1.js"></script>
+  <script type="text/javascript" src="./js/jquery.mousewheel.js"></script>    
+  <link type="text/css" rel="stylesheet" href="./css/style.css">
+  <link type="text/css" rel="stylesheet" href="./css/bootstrap.css">
+  <style type="text/css">
+
+  #geo {
+/*    height: 750px;
+*/    padding: 0; 
+  }
+
+.globe {
+    stroke: rgba(255, 255, 255);
+    stroke-width: .25px;
+}
+
+svg {
+  width: 100%;
+  height: 100%px;
+  pointer-events: all;
+}
+
+circle {
+  fill: #dbe4f0;
+}
+
+path {
+  fill: #aaa;
+  stroke: #fff;
+}
+
+.trip {
+  fill: none;
+  stroke: #0100FF;
+}
+
+.row {
+  margin-top: 10px;
+}
+
+#map_selector {
+  //margin: 15px;  
+}
+
+#solselector {
+  /*margin: 10px;*/
+  margin-bottom: 15px;
+}
+
+#tripselector {
+  margin: 15px;
+}
+
+.btn-md {  
+  margin-bottom: 15px;
+  margin-right: 10px;
+}
+
+.legenda > span{
+  display: block;
+}
+
+.map-title {
+  font-size: 1em;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+</style>
+</head>
+
+<body data-gr-c-s-loaded="true">
+  <div class="container">  
+    <div class="row">        
+
+      <div class="col-md-3">     
+        <h3>Santa's Stolen Sleigh <small>Ultimate Solution Visualizer</small></h3>
+        
+        <!-- <span>by Daniel Dias</span> -->
+
+
+        <div>
+          <span>Solution</span>
+          <select id="solselector">
+            <option value="null" selected=""></option>
+            <option value="sol_1">sol_1</option>          </select>
+
+        </div> 
+
+
+        <!-- <button id="loadtrips" class="btn btn-primary btn-md">Load all Routes</button> -->
+        <!-- <button id="cleartrips" class="btn btn-primary btn-md">Clear Routes</button> -->
+
+        <div class="panel panel-default">
+          <div class="panel-heading text-center">Solution Data</div>
+          <table class="table table-condensed table-bordered">
+            <tbody><tr>
+              <td>
+                <span class="dados">Cost</span>
+              </td>
+              <td>
+                <span id="sol_cost"></span>
+              </td>
+            </tr> 
+            <tr>
+              <td>
+                <span class="dados">Number of Trips</span>
+              </td>
+              <td>
+                <span id="num_trips"></span>
+              </td>
+            </tr> 
+          </tbody></table>
+        </div> <!--END panel panel-default-->
+        <div>
+          <span>Trip</span>
+          <select id="tripselector"><option value="null" selected=""></option><option value="trip1">trip1</option><option value="trip2">trip2</option><option value="trip3">trip3</option><option value="trip4">trip4</option><option value="trip5">trip5</option><option value="trip6">trip6</option><option value="trip7">trip7</option><option value="trip8">trip8</option><option value="trip9">trip9</option><option value="trip10">trip10</option><option value="trip11">trip11</option><option value="trip12">trip12</option><option value="trip13">trip13</option><option value="trip14">trip14</option><option value="trip15">trip15</option><option value="trip16">trip16</option><option value="trip17">trip17</option><option value="trip18">trip18</option><option value="trip19">trip19</option><option value="trip20">trip20</option><option value="trip21">trip21</option><option value="trip22">trip22</option><option value="trip23">trip23</option><option value="trip24">trip24</option><option value="trip25">trip25</option><option value="trip26">trip26</option><option value="trip27">trip27</option><option value="trip28">trip28</option><option value="trip29">trip29</option><option value="trip30">trip30</option><option value="trip31">trip31</option><option value="trip32">trip32</option><option value="trip33">trip33</option><option value="trip34">trip34</option><option value="trip35">trip35</option><option value="trip36">trip36</option><option value="trip37">trip37</option><option value="trip38">trip38</option><option value="trip39">trip39</option><option value="trip40">trip40</option><option value="trip41">trip41</option><option value="trip42">trip42</option><option value="trip43">trip43</option><option value="trip44">trip44</option><option value="trip45">trip45</option><option value="trip46">trip46</option><option value="trip47">trip47</option><option value="trip48">trip48</option><option value="trip49">trip49</option><option value="trip50">trip50</option><option value="trip51">trip51</option><option value="trip52">trip52</option><option value="trip53">trip53</option><option value="trip54">trip54</option><option value="trip55">trip55</option><option value="trip56">trip56</option><option value="trip57">trip57</option><option value="trip58">trip58</option><option value="trip59">trip59</option><option value="trip60">trip60</option><option value="trip61">trip61</option><option value="trip62">trip62</option><option value="trip63">trip63</option><option value="trip64">trip64</option><option value="trip65">trip65</option><option value="trip66">trip66</option><option value="trip67">trip67</option><option value="trip68">trip68</option><option value="trip69">trip69</option><option value="trip70">trip70</option><option value="trip71">trip71</option><option value="trip72">trip72</option><option value="trip73">trip73</option><option value="trip74">trip74</option><option value="trip75">trip75</option><option value="trip76">trip76</option><option value="trip77">trip77</option><option value="trip78">trip78</option><option value="trip79">trip79</option><option value="trip80">trip80</option><option value="trip81">trip81</option><option value="trip82">trip82</option><option value="trip83">trip83</option><option value="trip84">trip84</option><option value="trip85">trip85</option><option value="trip86">trip86</option><option value="trip87">trip87</option><option value="trip88">trip88</option><option value="trip89">trip89</option><option value="trip90">trip90</option><option value="trip91">trip91</option><option value="trip92">trip92</option><option value="trip93">trip93</option><option value="trip94">trip94</option><option value="trip95">trip95</option><option value="trip96">trip96</option><option value="trip97">trip97</option><option value="trip98">trip98</option><option value="trip99">trip99</option><option value="trip100">trip100</option><option value="trip101">trip101</option><option value="trip102">trip102</option><option value="trip103">trip103</option><option value="trip104">trip104</option><option value="trip105">trip105</option><option value="trip106">trip106</option><option value="trip107">trip107</option><option value="trip108">trip108</option><option value="trip109">trip109</option><option value="trip110">trip110</option><option value="trip111">trip111</option><option value="trip112">trip112</option><option value="trip113">trip113</option><option value="trip114">trip114</option><option value="trip115">trip115</option><option value="trip116">trip116</option><option value="trip117">trip117</option><option value="trip118">trip118</option><option value="trip119">trip119</option><option value="trip120">trip120</option><option value="trip121">trip121</option><option value="trip122">trip122</option><option value="trip123">trip123</option><option value="trip124">trip124</option><option value="trip125">trip125</option><option value="trip126">trip126</option><option value="trip127">trip127</option><option value="trip128">trip128</option><option value="trip129">trip129</option><option value="trip130">trip130</option><option value="trip131">trip131</option><option value="trip132">trip132</option><option value="trip133">trip133</option><option value="trip134">trip134</option><option value="trip135">trip135</option><option value="trip136">trip136</option><option value="trip137">trip137</option><option value="trip138">trip138</option><option value="trip139">trip139</option><option value="trip140">trip140</option><option value="trip141">trip141</option><option value="trip142">trip142</option><option value="trip143">trip143</option><option value="trip144">trip144</option><option value="trip145">trip145</option><option value="trip146">trip146</option><option value="trip147">trip147</option><option value="trip148">trip148</option><option value="trip149">trip149</option><option value="trip150">trip150</option><option value="trip151">trip151</option><option value="trip152">trip152</option><option value="trip153">trip153</option><option value="trip154">trip154</option><option value="trip155">trip155</option><option value="trip156">trip156</option><option value="trip157">trip157</option><option value="trip158">trip158</option><option value="trip159">trip159</option><option value="trip160">trip160</option><option value="trip161">trip161</option><option value="trip162">trip162</option><option value="trip163">trip163</option><option value="trip164">trip164</option><option value="trip165">trip165</option><option value="trip166">trip166</option><option value="trip167">trip167</option><option value="trip168">trip168</option><option value="trip169">trip169</option><option value="trip170">trip170</option><option value="trip171">trip171</option><option value="trip172">trip172</option><option value="trip173">trip173</option><option value="trip174">trip174</option><option value="trip175">trip175</option><option value="trip176">trip176</option><option value="trip177">trip177</option><option value="trip178">trip178</option><option value="trip179">trip179</option><option value="trip180">trip180</option><option value="trip181">trip181</option><option value="trip182">trip182</option><option value="trip183">trip183</option><option value="trip184">trip184</option><option value="trip185">trip185</option><option value="trip186">trip186</option><option value="trip187">trip187</option><option value="trip188">trip188</option><option value="trip189">trip189</option><option value="trip190">trip190</option><option value="trip191">trip191</option><option value="trip192">trip192</option><option value="trip193">trip193</option><option value="trip194">trip194</option><option value="trip195">trip195</option><option value="trip196">trip196</option><option value="trip197">trip197</option><option value="trip198">trip198</option><option value="trip199">trip199</option><option value="trip200">trip200</option><option value="trip201">trip201</option><option value="trip202">trip202</option><option value="trip203">trip203</option><option value="trip204">trip204</option><option value="trip205">trip205</option><option value="trip206">trip206</option><option value="trip207">trip207</option><option value="trip208">trip208</option><option value="trip209">trip209</option><option value="trip210">trip210</option><option value="trip211">trip211</option><option value="trip212">trip212</option><option value="trip213">trip213</option><option value="trip214">trip214</option><option value="trip215">trip215</option><option value="trip216">trip216</option><option value="trip217">trip217</option><option value="trip218">trip218</option><option value="trip219">trip219</option><option value="trip220">trip220</option><option value="trip221">trip221</option><option value="trip222">trip222</option><option value="trip223">trip223</option><option value="trip224">trip224</option><option value="trip225">trip225</option><option value="trip226">trip226</option><option value="trip227">trip227</option><option value="trip228">trip228</option><option value="trip229">trip229</option><option value="trip230">trip230</option><option value="trip231">trip231</option><option value="trip232">trip232</option><option value="trip233">trip233</option><option value="trip234">trip234</option><option value="trip235">trip235</option><option value="trip236">trip236</option><option value="trip237">trip237</option><option value="trip238">trip238</option><option value="trip239">trip239</option><option value="trip240">trip240</option><option value="trip241">trip241</option><option value="trip242">trip242</option><option value="trip243">trip243</option><option value="trip244">trip244</option><option value="trip245">trip245</option><option value="trip246">trip246</option><option value="trip247">trip247</option><option value="trip248">trip248</option><option value="trip249">trip249</option><option value="trip250">trip250</option><option value="trip251">trip251</option><option value="trip252">trip252</option><option value="trip253">trip253</option><option value="trip254">trip254</option><option value="trip255">trip255</option><option value="trip256">trip256</option><option value="trip257">trip257</option><option value="trip258">trip258</option><option value="trip259">trip259</option><option value="trip260">trip260</option><option value="trip261">trip261</option><option value="trip262">trip262</option><option value="trip263">trip263</option><option value="trip264">trip264</option><option value="trip265">trip265</option><option value="trip266">trip266</option><option value="trip267">trip267</option><option value="trip268">trip268</option><option value="trip269">trip269</option><option value="trip270">trip270</option><option value="trip271">trip271</option><option value="trip272">trip272</option><option value="trip273">trip273</option><option value="trip274">trip274</option><option value="trip275">trip275</option><option value="trip276">trip276</option><option value="trip277">trip277</option><option value="trip278">trip278</option><option value="trip279">trip279</option><option value="trip280">trip280</option><option value="trip281">trip281</option><option value="trip282">trip282</option><option value="trip283">trip283</option><option value="trip284">trip284</option><option value="trip285">trip285</option><option value="trip286">trip286</option><option value="trip287">trip287</option><option value="trip288">trip288</option><option value="trip289">trip289</option><option value="trip290">trip290</option><option value="trip291">trip291</option><option value="trip292">trip292</option><option value="trip293">trip293</option><option value="trip294">trip294</option><option value="trip295">trip295</option><option value="trip296">trip296</option><option value="trip297">trip297</option><option value="trip298">trip298</option><option value="trip299">trip299</option><option value="trip300">trip300</option><option value="trip301">trip301</option><option value="trip302">trip302</option><option value="trip303">trip303</option><option value="trip304">trip304</option><option value="trip305">trip305</option><option value="trip306">trip306</option><option value="trip307">trip307</option><option value="trip308">trip308</option><option value="trip309">trip309</option><option value="trip310">trip310</option><option value="trip311">trip311</option><option value="trip312">trip312</option><option value="trip313">trip313</option><option value="trip314">trip314</option><option value="trip315">trip315</option><option value="trip316">trip316</option><option value="trip317">trip317</option><option value="trip318">trip318</option><option value="trip319">trip319</option><option value="trip320">trip320</option><option value="trip321">trip321</option><option value="trip322">trip322</option><option value="trip323">trip323</option><option value="trip324">trip324</option><option value="trip325">trip325</option><option value="trip326">trip326</option><option value="trip327">trip327</option><option value="trip328">trip328</option><option value="trip329">trip329</option><option value="trip330">trip330</option><option value="trip331">trip331</option><option value="trip332">trip332</option><option value="trip333">trip333</option><option value="trip334">trip334</option><option value="trip335">trip335</option><option value="trip336">trip336</option><option value="trip337">trip337</option><option value="trip338">trip338</option><option value="trip339">trip339</option><option value="trip340">trip340</option><option value="trip341">trip341</option><option value="trip342">trip342</option><option value="trip343">trip343</option><option value="trip344">trip344</option><option value="trip345">trip345</option><option value="trip346">trip346</option><option value="trip347">trip347</option><option value="trip348">trip348</option><option value="trip349">trip349</option><option value="trip350">trip350</option><option value="trip351">trip351</option><option value="trip352">trip352</option><option value="trip353">trip353</option><option value="trip354">trip354</option><option value="trip355">trip355</option><option value="trip356">trip356</option><option value="trip357">trip357</option><option value="trip358">trip358</option><option value="trip359">trip359</option><option value="trip360">trip360</option><option value="trip361">trip361</option><option value="trip362">trip362</option><option value="trip363">trip363</option><option value="trip364">trip364</option><option value="trip365">trip365</option><option value="trip366">trip366</option><option value="trip367">trip367</option><option value="trip368">trip368</option><option value="trip369">trip369</option><option value="trip370">trip370</option><option value="trip371">trip371</option><option value="trip372">trip372</option><option value="trip373">trip373</option><option value="trip374">trip374</option><option value="trip375">trip375</option><option value="trip376">trip376</option><option value="trip377">trip377</option><option value="trip378">trip378</option><option value="trip379">trip379</option><option value="trip380">trip380</option><option value="trip381">trip381</option><option value="trip382">trip382</option><option value="trip383">trip383</option><option value="trip384">trip384</option><option value="trip385">trip385</option><option value="trip386">trip386</option><option value="trip387">trip387</option><option value="trip388">trip388</option><option value="trip389">trip389</option><option value="trip390">trip390</option><option value="trip391">trip391</option><option value="trip392">trip392</option><option value="trip393">trip393</option><option value="trip394">trip394</option><option value="trip395">trip395</option><option value="trip396">trip396</option><option value="trip397">trip397</option><option value="trip398">trip398</option><option value="trip399">trip399</option><option value="trip400">trip400</option><option value="trip401">trip401</option><option value="trip402">trip402</option><option value="trip403">trip403</option><option value="trip404">trip404</option><option value="trip405">trip405</option><option value="trip406">trip406</option><option value="trip407">trip407</option><option value="trip408">trip408</option><option value="trip409">trip409</option><option value="trip410">trip410</option><option value="trip411">trip411</option><option value="trip412">trip412</option><option value="trip413">trip413</option><option value="trip414">trip414</option><option value="trip415">trip415</option><option value="trip416">trip416</option><option value="trip417">trip417</option><option value="trip418">trip418</option><option value="trip419">trip419</option><option value="trip420">trip420</option><option value="trip421">trip421</option><option value="trip422">trip422</option><option value="trip423">trip423</option><option value="trip424">trip424</option><option value="trip425">trip425</option><option value="trip426">trip426</option><option value="trip427">trip427</option><option value="trip428">trip428</option><option value="trip429">trip429</option><option value="trip430">trip430</option><option value="trip431">trip431</option><option value="trip432">trip432</option><option value="trip433">trip433</option><option value="trip434">trip434</option><option value="trip435">trip435</option><option value="trip436">trip436</option><option value="trip437">trip437</option><option value="trip438">trip438</option><option value="trip439">trip439</option><option value="trip440">trip440</option><option value="trip441">trip441</option><option value="trip442">trip442</option><option value="trip443">trip443</option><option value="trip444">trip444</option><option value="trip445">trip445</option><option value="trip446">trip446</option><option value="trip447">trip447</option><option value="trip448">trip448</option><option value="trip449">trip449</option><option value="trip450">trip450</option><option value="trip451">trip451</option><option value="trip452">trip452</option><option value="trip453">trip453</option><option value="trip454">trip454</option><option value="trip455">trip455</option><option value="trip456">trip456</option><option value="trip457">trip457</option><option value="trip458">trip458</option><option value="trip459">trip459</option><option value="trip460">trip460</option><option value="trip461">trip461</option><option value="trip462">trip462</option><option value="trip463">trip463</option><option value="trip464">trip464</option><option value="trip465">trip465</option><option value="trip466">trip466</option><option value="trip467">trip467</option><option value="trip468">trip468</option><option value="trip469">trip469</option><option value="trip470">trip470</option><option value="trip471">trip471</option><option value="trip472">trip472</option><option value="trip473">trip473</option><option value="trip474">trip474</option><option value="trip475">trip475</option><option value="trip476">trip476</option><option value="trip477">trip477</option><option value="trip478">trip478</option><option value="trip479">trip479</option><option value="trip480">trip480</option><option value="trip481">trip481</option><option value="trip482">trip482</option><option value="trip483">trip483</option><option value="trip484">trip484</option><option value="trip485">trip485</option><option value="trip486">trip486</option><option value="trip487">trip487</option><option value="trip488">trip488</option><option value="trip489">trip489</option><option value="trip490">trip490</option><option value="trip491">trip491</option><option value="trip492">trip492</option><option value="trip493">trip493</option><option value="trip494">trip494</option><option value="trip495">trip495</option><option value="trip496">trip496</option><option value="trip497">trip497</option><option value="trip498">trip498</option><option value="trip499">trip499</option><option value="trip500">trip500</option><option value="trip501">trip501</option><option value="trip502">trip502</option><option value="trip503">trip503</option><option value="trip504">trip504</option><option value="trip505">trip505</option><option value="trip506">trip506</option><option value="trip507">trip507</option><option value="trip508">trip508</option><option value="trip509">trip509</option><option value="trip510">trip510</option><option value="trip511">trip511</option><option value="trip512">trip512</option><option value="trip513">trip513</option><option value="trip514">trip514</option><option value="trip515">trip515</option><option value="trip516">trip516</option><option value="trip517">trip517</option><option value="trip518">trip518</option><option value="trip519">trip519</option><option value="trip520">trip520</option><option value="trip521">trip521</option><option value="trip522">trip522</option><option value="trip523">trip523</option><option value="trip524">trip524</option><option value="trip525">trip525</option><option value="trip526">trip526</option><option value="trip527">trip527</option><option value="trip528">trip528</option><option value="trip529">trip529</option><option value="trip530">trip530</option><option value="trip531">trip531</option><option value="trip532">trip532</option><option value="trip533">trip533</option><option value="trip534">trip534</option><option value="trip535">trip535</option><option value="trip536">trip536</option><option value="trip537">trip537</option><option value="trip538">trip538</option><option value="trip539">trip539</option><option value="trip540">trip540</option><option value="trip541">trip541</option><option value="trip542">trip542</option><option value="trip543">trip543</option><option value="trip544">trip544</option><option value="trip545">trip545</option><option value="trip546">trip546</option><option value="trip547">trip547</option><option value="trip548">trip548</option><option value="trip549">trip549</option><option value="trip550">trip550</option><option value="trip551">trip551</option><option value="trip552">trip552</option><option value="trip553">trip553</option><option value="trip554">trip554</option><option value="trip555">trip555</option><option value="trip556">trip556</option><option value="trip557">trip557</option><option value="trip558">trip558</option><option value="trip559">trip559</option><option value="trip560">trip560</option><option value="trip561">trip561</option><option value="trip562">trip562</option><option value="trip563">trip563</option><option value="trip564">trip564</option><option value="trip565">trip565</option><option value="trip566">trip566</option><option value="trip567">trip567</option><option value="trip568">trip568</option><option value="trip569">trip569</option><option value="trip570">trip570</option><option value="trip571">trip571</option><option value="trip572">trip572</option><option value="trip573">trip573</option><option value="trip574">trip574</option><option value="trip575">trip575</option><option value="trip576">trip576</option><option value="trip577">trip577</option><option value="trip578">trip578</option><option value="trip579">trip579</option><option value="trip580">trip580</option><option value="trip581">trip581</option><option value="trip582">trip582</option><option value="trip583">trip583</option><option value="trip584">trip584</option><option value="trip585">trip585</option><option value="trip586">trip586</option><option value="trip587">trip587</option><option value="trip588">trip588</option><option value="trip589">trip589</option><option value="trip590">trip590</option><option value="trip591">trip591</option><option value="trip592">trip592</option><option value="trip593">trip593</option><option value="trip594">trip594</option><option value="trip595">trip595</option><option value="trip596">trip596</option><option value="trip597">trip597</option><option value="trip598">trip598</option><option value="trip599">trip599</option><option value="trip600">trip600</option><option value="trip601">trip601</option><option value="trip602">trip602</option><option value="trip603">trip603</option><option value="trip604">trip604</option><option value="trip605">trip605</option><option value="trip606">trip606</option><option value="trip607">trip607</option><option value="trip608">trip608</option><option value="trip609">trip609</option><option value="trip610">trip610</option><option value="trip611">trip611</option><option value="trip612">trip612</option><option value="trip613">trip613</option><option value="trip614">trip614</option><option value="trip615">trip615</option><option value="trip616">trip616</option><option value="trip617">trip617</option><option value="trip618">trip618</option><option value="trip619">trip619</option><option value="trip620">trip620</option><option value="trip621">trip621</option><option value="trip622">trip622</option><option value="trip623">trip623</option><option value="trip624">trip624</option><option value="trip625">trip625</option><option value="trip626">trip626</option><option value="trip627">trip627</option><option value="trip628">trip628</option><option value="trip629">trip629</option><option value="trip630">trip630</option><option value="trip631">trip631</option><option value="trip632">trip632</option><option value="trip633">trip633</option><option value="trip634">trip634</option><option value="trip635">trip635</option><option value="trip636">trip636</option><option value="trip637">trip637</option><option value="trip638">trip638</option><option value="trip639">trip639</option><option value="trip640">trip640</option><option value="trip641">trip641</option><option value="trip642">trip642</option><option value="trip643">trip643</option><option value="trip644">trip644</option><option value="trip645">trip645</option><option value="trip646">trip646</option><option value="trip647">trip647</option><option value="trip648">trip648</option><option value="trip649">trip649</option><option value="trip650">trip650</option><option value="trip651">trip651</option><option value="trip652">trip652</option><option value="trip653">trip653</option><option value="trip654">trip654</option><option value="trip655">trip655</option><option value="trip656">trip656</option><option value="trip657">trip657</option><option value="trip658">trip658</option><option value="trip659">trip659</option><option value="trip660">trip660</option><option value="trip661">trip661</option><option value="trip662">trip662</option><option value="trip663">trip663</option><option value="trip664">trip664</option><option value="trip665">trip665</option><option value="trip666">trip666</option><option value="trip667">trip667</option><option value="trip668">trip668</option><option value="trip669">trip669</option><option value="trip670">trip670</option><option value="trip671">trip671</option><option value="trip672">trip672</option><option value="trip673">trip673</option><option value="trip674">trip674</option><option value="trip675">trip675</option><option value="trip676">trip676</option><option value="trip677">trip677</option><option value="trip678">trip678</option><option value="trip679">trip679</option><option value="trip680">trip680</option><option value="trip681">trip681</option><option value="trip682">trip682</option><option value="trip683">trip683</option><option value="trip684">trip684</option><option value="trip685">trip685</option><option value="trip686">trip686</option><option value="trip687">trip687</option><option value="trip688">trip688</option><option value="trip689">trip689</option><option value="trip690">trip690</option><option value="trip691">trip691</option><option value="trip692">trip692</option><option value="trip693">trip693</option><option value="trip694">trip694</option><option value="trip695">trip695</option><option value="trip696">trip696</option><option value="trip697">trip697</option><option value="trip698">trip698</option><option value="trip699">trip699</option><option value="trip700">trip700</option><option value="trip701">trip701</option><option value="trip702">trip702</option><option value="trip703">trip703</option><option value="trip704">trip704</option><option value="trip705">trip705</option><option value="trip706">trip706</option><option value="trip707">trip707</option><option value="trip708">trip708</option><option value="trip709">trip709</option><option value="trip710">trip710</option><option value="trip711">trip711</option><option value="trip712">trip712</option><option value="trip713">trip713</option><option value="trip714">trip714</option><option value="trip715">trip715</option><option value="trip716">trip716</option><option value="trip717">trip717</option><option value="trip718">trip718</option><option value="trip719">trip719</option><option value="trip720">trip720</option><option value="trip721">trip721</option><option value="trip722">trip722</option><option value="trip723">trip723</option><option value="trip724">trip724</option><option value="trip725">trip725</option><option value="trip726">trip726</option><option value="trip727">trip727</option><option value="trip728">trip728</option><option value="trip729">trip729</option><option value="trip730">trip730</option><option value="trip731">trip731</option><option value="trip732">trip732</option><option value="trip733">trip733</option><option value="trip734">trip734</option><option value="trip735">trip735</option><option value="trip736">trip736</option><option value="trip737">trip737</option><option value="trip738">trip738</option><option value="trip739">trip739</option><option value="trip740">trip740</option><option value="trip741">trip741</option><option value="trip742">trip742</option><option value="trip743">trip743</option><option value="trip744">trip744</option><option value="trip745">trip745</option><option value="trip746">trip746</option><option value="trip747">trip747</option><option value="trip748">trip748</option><option value="trip749">trip749</option><option value="trip750">trip750</option><option value="trip751">trip751</option><option value="trip752">trip752</option><option value="trip753">trip753</option><option value="trip754">trip754</option><option value="trip755">trip755</option><option value="trip756">trip756</option><option value="trip757">trip757</option><option value="trip758">trip758</option><option value="trip759">trip759</option><option value="trip760">trip760</option><option value="trip761">trip761</option><option value="trip762">trip762</option><option value="trip763">trip763</option><option value="trip764">trip764</option><option value="trip765">trip765</option><option value="trip766">trip766</option><option value="trip767">trip767</option><option value="trip768">trip768</option><option value="trip769">trip769</option><option value="trip770">trip770</option><option value="trip771">trip771</option><option value="trip772">trip772</option><option value="trip773">trip773</option><option value="trip774">trip774</option><option value="trip775">trip775</option><option value="trip776">trip776</option><option value="trip777">trip777</option><option value="trip778">trip778</option><option value="trip779">trip779</option><option value="trip780">trip780</option><option value="trip781">trip781</option><option value="trip782">trip782</option><option value="trip783">trip783</option><option value="trip784">trip784</option><option value="trip785">trip785</option><option value="trip786">trip786</option><option value="trip787">trip787</option><option value="trip788">trip788</option><option value="trip789">trip789</option><option value="trip790">trip790</option><option value="trip791">trip791</option><option value="trip792">trip792</option><option value="trip793">trip793</option><option value="trip794">trip794</option><option value="trip795">trip795</option><option value="trip796">trip796</option><option value="trip797">trip797</option><option value="trip798">trip798</option><option value="trip799">trip799</option><option value="trip800">trip800</option><option value="trip801">trip801</option><option value="trip802">trip802</option><option value="trip803">trip803</option><option value="trip804">trip804</option><option value="trip805">trip805</option><option value="trip806">trip806</option><option value="trip807">trip807</option><option value="trip808">trip808</option><option value="trip809">trip809</option><option value="trip810">trip810</option><option value="trip811">trip811</option><option value="trip812">trip812</option><option value="trip813">trip813</option><option value="trip814">trip814</option><option value="trip815">trip815</option><option value="trip816">trip816</option><option value="trip817">trip817</option><option value="trip818">trip818</option><option value="trip819">trip819</option><option value="trip820">trip820</option><option value="trip821">trip821</option><option value="trip822">trip822</option><option value="trip823">trip823</option><option value="trip824">trip824</option><option value="trip825">trip825</option><option value="trip826">trip826</option><option value="trip827">trip827</option><option value="trip828">trip828</option><option value="trip829">trip829</option><option value="trip830">trip830</option><option value="trip831">trip831</option><option value="trip832">trip832</option><option value="trip833">trip833</option><option value="trip834">trip834</option><option value="trip835">trip835</option><option value="trip836">trip836</option><option value="trip837">trip837</option><option value="trip838">trip838</option><option value="trip839">trip839</option><option value="trip840">trip840</option><option value="trip841">trip841</option><option value="trip842">trip842</option><option value="trip843">trip843</option><option value="trip844">trip844</option><option value="trip845">trip845</option><option value="trip846">trip846</option><option value="trip847">trip847</option><option value="trip848">trip848</option><option value="trip849">trip849</option><option value="trip850">trip850</option><option value="trip851">trip851</option><option value="trip852">trip852</option><option value="trip853">trip853</option><option value="trip854">trip854</option><option value="trip855">trip855</option><option value="trip856">trip856</option><option value="trip857">trip857</option><option value="trip858">trip858</option><option value="trip859">trip859</option><option value="trip860">trip860</option><option value="trip861">trip861</option><option value="trip862">trip862</option><option value="trip863">trip863</option><option value="trip864">trip864</option><option value="trip865">trip865</option><option value="trip866">trip866</option><option value="trip867">trip867</option><option value="trip868">trip868</option><option value="trip869">trip869</option><option value="trip870">trip870</option><option value="trip871">trip871</option><option value="trip872">trip872</option><option value="trip873">trip873</option><option value="trip874">trip874</option><option value="trip875">trip875</option><option value="trip876">trip876</option><option value="trip877">trip877</option><option value="trip878">trip878</option><option value="trip879">trip879</option><option value="trip880">trip880</option><option value="trip881">trip881</option><option value="trip882">trip882</option><option value="trip883">trip883</option><option value="trip884">trip884</option><option value="trip885">trip885</option><option value="trip886">trip886</option><option value="trip887">trip887</option><option value="trip888">trip888</option><option value="trip889">trip889</option><option value="trip890">trip890</option><option value="trip891">trip891</option><option value="trip892">trip892</option><option value="trip893">trip893</option><option value="trip894">trip894</option><option value="trip895">trip895</option><option value="trip896">trip896</option><option value="trip897">trip897</option><option value="trip898">trip898</option><option value="trip899">trip899</option><option value="trip900">trip900</option><option value="trip901">trip901</option><option value="trip902">trip902</option><option value="trip903">trip903</option><option value="trip904">trip904</option><option value="trip905">trip905</option><option value="trip906">trip906</option><option value="trip907">trip907</option><option value="trip908">trip908</option><option value="trip909">trip909</option><option value="trip910">trip910</option><option value="trip911">trip911</option><option value="trip912">trip912</option><option value="trip913">trip913</option><option value="trip914">trip914</option><option value="trip915">trip915</option><option value="trip916">trip916</option><option value="trip917">trip917</option><option value="trip918">trip918</option><option value="trip919">trip919</option><option value="trip920">trip920</option><option value="trip921">trip921</option><option value="trip922">trip922</option><option value="trip923">trip923</option><option value="trip924">trip924</option><option value="trip925">trip925</option><option value="trip926">trip926</option><option value="trip927">trip927</option><option value="trip928">trip928</option><option value="trip929">trip929</option><option value="trip930">trip930</option><option value="trip931">trip931</option><option value="trip932">trip932</option><option value="trip933">trip933</option><option value="trip934">trip934</option><option value="trip935">trip935</option><option value="trip936">trip936</option><option value="trip937">trip937</option><option value="trip938">trip938</option><option value="trip939">trip939</option><option value="trip940">trip940</option><option value="trip941">trip941</option><option value="trip942">trip942</option><option value="trip943">trip943</option><option value="trip944">trip944</option><option value="trip945">trip945</option><option value="trip946">trip946</option><option value="trip947">trip947</option><option value="trip948">trip948</option><option value="trip949">trip949</option><option value="trip950">trip950</option><option value="trip951">trip951</option><option value="trip952">trip952</option><option value="trip953">trip953</option><option value="trip954">trip954</option><option value="trip955">trip955</option><option value="trip956">trip956</option><option value="trip957">trip957</option><option value="trip958">trip958</option><option value="trip959">trip959</option><option value="trip960">trip960</option><option value="trip961">trip961</option><option value="trip962">trip962</option><option value="trip963">trip963</option><option value="trip964">trip964</option><option value="trip965">trip965</option><option value="trip966">trip966</option><option value="trip967">trip967</option><option value="trip968">trip968</option><option value="trip969">trip969</option><option value="trip970">trip970</option><option value="trip971">trip971</option><option value="trip972">trip972</option><option value="trip973">trip973</option><option value="trip974">trip974</option><option value="trip975">trip975</option><option value="trip976">trip976</option><option value="trip977">trip977</option><option value="trip978">trip978</option><option value="trip979">trip979</option><option value="trip980">trip980</option><option value="trip981">trip981</option><option value="trip982">trip982</option><option value="trip983">trip983</option><option value="trip984">trip984</option><option value="trip985">trip985</option><option value="trip986">trip986</option><option value="trip987">trip987</option><option value="trip988">trip988</option><option value="trip989">trip989</option><option value="trip990">trip990</option><option value="trip991">trip991</option><option value="trip992">trip992</option><option value="trip993">trip993</option><option value="trip994">trip994</option><option value="trip995">trip995</option><option value="trip996">trip996</option><option value="trip997">trip997</option><option value="trip998">trip998</option><option value="trip999">trip999</option><option value="trip1000">trip1000</option><option value="trip1001">trip1001</option><option value="trip1002">trip1002</option><option value="trip1003">trip1003</option><option value="trip1004">trip1004</option><option value="trip1005">trip1005</option><option value="trip1006">trip1006</option><option value="trip1007">trip1007</option><option value="trip1008">trip1008</option><option value="trip1009">trip1009</option><option value="trip1010">trip1010</option><option value="trip1011">trip1011</option><option value="trip1012">trip1012</option><option value="trip1013">trip1013</option><option value="trip1014">trip1014</option><option value="trip1015">trip1015</option><option value="trip1016">trip1016</option><option value="trip1017">trip1017</option><option value="trip1018">trip1018</option><option value="trip1019">trip1019</option><option value="trip1020">trip1020</option><option value="trip1021">trip1021</option><option value="trip1022">trip1022</option><option value="trip1023">trip1023</option><option value="trip1024">trip1024</option><option value="trip1025">trip1025</option><option value="trip1026">trip1026</option><option value="trip1027">trip1027</option><option value="trip1028">trip1028</option><option value="trip1029">trip1029</option><option value="trip1030">trip1030</option><option value="trip1031">trip1031</option><option value="trip1032">trip1032</option><option value="trip1033">trip1033</option><option value="trip1034">trip1034</option><option value="trip1035">trip1035</option><option value="trip1036">trip1036</option><option value="trip1037">trip1037</option><option value="trip1038">trip1038</option><option value="trip1039">trip1039</option><option value="trip1040">trip1040</option><option value="trip1041">trip1041</option><option value="trip1042">trip1042</option><option value="trip1043">trip1043</option><option value="trip1044">trip1044</option><option value="trip1045">trip1045</option><option value="trip1046">trip1046</option><option value="trip1047">trip1047</option><option value="trip1048">trip1048</option><option value="trip1049">trip1049</option><option value="trip1050">trip1050</option><option value="trip1051">trip1051</option><option value="trip1052">trip1052</option><option value="trip1053">trip1053</option><option value="trip1054">trip1054</option><option value="trip1055">trip1055</option><option value="trip1056">trip1056</option><option value="trip1057">trip1057</option><option value="trip1058">trip1058</option><option value="trip1059">trip1059</option><option value="trip1060">trip1060</option><option value="trip1061">trip1061</option><option value="trip1062">trip1062</option><option value="trip1063">trip1063</option><option value="trip1064">trip1064</option><option value="trip1065">trip1065</option><option value="trip1066">trip1066</option><option value="trip1067">trip1067</option><option value="trip1068">trip1068</option><option value="trip1069">trip1069</option><option value="trip1070">trip1070</option><option value="trip1071">trip1071</option><option value="trip1072">trip1072</option><option value="trip1073">trip1073</option><option value="trip1074">trip1074</option><option value="trip1075">trip1075</option><option value="trip1076">trip1076</option><option value="trip1077">trip1077</option><option value="trip1078">trip1078</option><option value="trip1079">trip1079</option><option value="trip1080">trip1080</option><option value="trip1081">trip1081</option><option value="trip1082">trip1082</option><option value="trip1083">trip1083</option><option value="trip1084">trip1084</option><option value="trip1085">trip1085</option><option value="trip1086">trip1086</option><option value="trip1087">trip1087</option><option value="trip1088">trip1088</option><option value="trip1089">trip1089</option><option value="trip1090">trip1090</option><option value="trip1091">trip1091</option><option value="trip1092">trip1092</option><option value="trip1093">trip1093</option><option value="trip1094">trip1094</option><option value="trip1095">trip1095</option><option value="trip1096">trip1096</option><option value="trip1097">trip1097</option><option value="trip1098">trip1098</option><option value="trip1099">trip1099</option><option value="trip1100">trip1100</option><option value="trip1101">trip1101</option><option value="trip1102">trip1102</option><option value="trip1103">trip1103</option><option value="trip1104">trip1104</option><option value="trip1105">trip1105</option><option value="trip1106">trip1106</option><option value="trip1107">trip1107</option><option value="trip1108">trip1108</option><option value="trip1109">trip1109</option><option value="trip1110">trip1110</option><option value="trip1111">trip1111</option><option value="trip1112">trip1112</option><option value="trip1113">trip1113</option><option value="trip1114">trip1114</option><option value="trip1115">trip1115</option><option value="trip1116">trip1116</option><option value="trip1117">trip1117</option><option value="trip1118">trip1118</option><option value="trip1119">trip1119</option><option value="trip1120">trip1120</option><option value="trip1121">trip1121</option><option value="trip1122">trip1122</option><option value="trip1123">trip1123</option><option value="trip1124">trip1124</option><option value="trip1125">trip1125</option><option value="trip1126">trip1126</option><option value="trip1127">trip1127</option><option value="trip1128">trip1128</option><option value="trip1129">trip1129</option><option value="trip1130">trip1130</option><option value="trip1131">trip1131</option><option value="trip1132">trip1132</option><option value="trip1133">trip1133</option><option value="trip1134">trip1134</option><option value="trip1135">trip1135</option><option value="trip1136">trip1136</option><option value="trip1137">trip1137</option><option value="trip1138">trip1138</option><option value="trip1139">trip1139</option><option value="trip1140">trip1140</option><option value="trip1141">trip1141</option><option value="trip1142">trip1142</option><option value="trip1143">trip1143</option><option value="trip1144">trip1144</option><option value="trip1145">trip1145</option><option value="trip1146">trip1146</option><option value="trip1147">trip1147</option><option value="trip1148">trip1148</option><option value="trip1149">trip1149</option><option value="trip1150">trip1150</option><option value="trip1151">trip1151</option><option value="trip1152">trip1152</option><option value="trip1153">trip1153</option><option value="trip1154">trip1154</option><option value="trip1155">trip1155</option><option value="trip1156">trip1156</option><option value="trip1157">trip1157</option><option value="trip1158">trip1158</option><option value="trip1159">trip1159</option><option value="trip1160">trip1160</option><option value="trip1161">trip1161</option><option value="trip1162">trip1162</option><option value="trip1163">trip1163</option><option value="trip1164">trip1164</option><option value="trip1165">trip1165</option><option value="trip1166">trip1166</option><option value="trip1167">trip1167</option><option value="trip1168">trip1168</option><option value="trip1169">trip1169</option><option value="trip1170">trip1170</option><option value="trip1171">trip1171</option><option value="trip1172">trip1172</option><option value="trip1173">trip1173</option><option value="trip1174">trip1174</option><option value="trip1175">trip1175</option><option value="trip1176">trip1176</option><option value="trip1177">trip1177</option><option value="trip1178">trip1178</option><option value="trip1179">trip1179</option><option value="trip1180">trip1180</option><option value="trip1181">trip1181</option><option value="trip1182">trip1182</option><option value="trip1183">trip1183</option><option value="trip1184">trip1184</option><option value="trip1185">trip1185</option><option value="trip1186">trip1186</option><option value="trip1187">trip1187</option><option value="trip1188">trip1188</option><option value="trip1189">trip1189</option><option value="trip1190">trip1190</option><option value="trip1191">trip1191</option><option value="trip1192">trip1192</option><option value="trip1193">trip1193</option><option value="trip1194">trip1194</option><option value="trip1195">trip1195</option><option value="trip1196">trip1196</option><option value="trip1197">trip1197</option><option value="trip1198">trip1198</option><option value="trip1199">trip1199</option><option value="trip1200">trip1200</option><option value="trip1201">trip1201</option><option value="trip1202">trip1202</option><option value="trip1203">trip1203</option><option value="trip1204">trip1204</option><option value="trip1205">trip1205</option><option value="trip1206">trip1206</option><option value="trip1207">trip1207</option><option value="trip1208">trip1208</option><option value="trip1209">trip1209</option><option value="trip1210">trip1210</option><option value="trip1211">trip1211</option><option value="trip1212">trip1212</option><option value="trip1213">trip1213</option><option value="trip1214">trip1214</option><option value="trip1215">trip1215</option><option value="trip1216">trip1216</option><option value="trip1217">trip1217</option><option value="trip1218">trip1218</option><option value="trip1219">trip1219</option><option value="trip1220">trip1220</option><option value="trip1221">trip1221</option><option value="trip1222">trip1222</option><option value="trip1223">trip1223</option><option value="trip1224">trip1224</option><option value="trip1225">trip1225</option><option value="trip1226">trip1226</option><option value="trip1227">trip1227</option><option value="trip1228">trip1228</option><option value="trip1229">trip1229</option><option value="trip1230">trip1230</option><option value="trip1231">trip1231</option><option value="trip1232">trip1232</option><option value="trip1233">trip1233</option><option value="trip1234">trip1234</option><option value="trip1235">trip1235</option><option value="trip1236">trip1236</option><option value="trip1237">trip1237</option><option value="trip1238">trip1238</option><option value="trip1239">trip1239</option><option value="trip1240">trip1240</option><option value="trip1241">trip1241</option><option value="trip1242">trip1242</option><option value="trip1243">trip1243</option><option value="trip1244">trip1244</option><option value="trip1245">trip1245</option><option value="trip1246">trip1246</option><option value="trip1247">trip1247</option><option value="trip1248">trip1248</option><option value="trip1249">trip1249</option><option value="trip1250">trip1250</option><option value="trip1251">trip1251</option><option value="trip1252">trip1252</option><option value="trip1253">trip1253</option><option value="trip1254">trip1254</option><option value="trip1255">trip1255</option><option value="trip1256">trip1256</option><option value="trip1257">trip1257</option><option value="trip1258">trip1258</option><option value="trip1259">trip1259</option><option value="trip1260">trip1260</option><option value="trip1261">trip1261</option><option value="trip1262">trip1262</option><option value="trip1263">trip1263</option><option value="trip1264">trip1264</option><option value="trip1265">trip1265</option><option value="trip1266">trip1266</option><option value="trip1267">trip1267</option><option value="trip1268">trip1268</option><option value="trip1269">trip1269</option><option value="trip1270">trip1270</option><option value="trip1271">trip1271</option><option value="trip1272">trip1272</option><option value="trip1273">trip1273</option><option value="trip1274">trip1274</option><option value="trip1275">trip1275</option><option value="trip1276">trip1276</option><option value="trip1277">trip1277</option><option value="trip1278">trip1278</option><option value="trip1279">trip1279</option><option value="trip1280">trip1280</option><option value="trip1281">trip1281</option><option value="trip1282">trip1282</option><option value="trip1283">trip1283</option><option value="trip1284">trip1284</option><option value="trip1285">trip1285</option><option value="trip1286">trip1286</option><option value="trip1287">trip1287</option><option value="trip1288">trip1288</option><option value="trip1289">trip1289</option><option value="trip1290">trip1290</option><option value="trip1291">trip1291</option><option value="trip1292">trip1292</option><option value="trip1293">trip1293</option><option value="trip1294">trip1294</option><option value="trip1295">trip1295</option><option value="trip1296">trip1296</option><option value="trip1297">trip1297</option><option value="trip1298">trip1298</option><option value="trip1299">trip1299</option><option value="trip1300">trip1300</option><option value="trip1301">trip1301</option><option value="trip1302">trip1302</option><option value="trip1303">trip1303</option><option value="trip1304">trip1304</option><option value="trip1305">trip1305</option><option value="trip1306">trip1306</option><option value="trip1307">trip1307</option><option value="trip1308">trip1308</option><option value="trip1309">trip1309</option><option value="trip1310">trip1310</option><option value="trip1311">trip1311</option><option value="trip1312">trip1312</option><option value="trip1313">trip1313</option><option value="trip1314">trip1314</option><option value="trip1315">trip1315</option><option value="trip1316">trip1316</option><option value="trip1317">trip1317</option><option value="trip1318">trip1318</option><option value="trip1319">trip1319</option><option value="trip1320">trip1320</option><option value="trip1321">trip1321</option><option value="trip1322">trip1322</option><option value="trip1323">trip1323</option><option value="trip1324">trip1324</option><option value="trip1325">trip1325</option><option value="trip1326">trip1326</option><option value="trip1327">trip1327</option><option value="trip1328">trip1328</option><option value="trip1329">trip1329</option><option value="trip1330">trip1330</option><option value="trip1331">trip1331</option><option value="trip1332">trip1332</option><option value="trip1333">trip1333</option><option value="trip1334">trip1334</option><option value="trip1335">trip1335</option><option value="trip1336">trip1336</option><option value="trip1337">trip1337</option><option value="trip1338">trip1338</option><option value="trip1339">trip1339</option><option value="trip1340">trip1340</option><option value="trip1341">trip1341</option><option value="trip1342">trip1342</option><option value="trip1343">trip1343</option><option value="trip1344">trip1344</option><option value="trip1345">trip1345</option><option value="trip1346">trip1346</option><option value="trip1347">trip1347</option><option value="trip1348">trip1348</option><option value="trip1349">trip1349</option><option value="trip1350">trip1350</option><option value="trip1351">trip1351</option><option value="trip1352">trip1352</option><option value="trip1353">trip1353</option><option value="trip1354">trip1354</option><option value="trip1355">trip1355</option><option value="trip1356">trip1356</option><option value="trip1357">trip1357</option><option value="trip1358">trip1358</option><option value="trip1359">trip1359</option><option value="trip1360">trip1360</option><option value="trip1361">trip1361</option><option value="trip1362">trip1362</option><option value="trip1363">trip1363</option><option value="trip1364">trip1364</option><option value="trip1365">trip1365</option><option value="trip1366">trip1366</option><option value="trip1367">trip1367</option><option value="trip1368">trip1368</option><option value="trip1369">trip1369</option><option value="trip1370">trip1370</option><option value="trip1371">trip1371</option><option value="trip1372">trip1372</option><option value="trip1373">trip1373</option><option value="trip1374">trip1374</option><option value="trip1375">trip1375</option><option value="trip1376">trip1376</option><option value="trip1377">trip1377</option><option value="trip1378">trip1378</option><option value="trip1379">trip1379</option><option value="trip1380">trip1380</option><option value="trip1381">trip1381</option><option value="trip1382">trip1382</option><option value="trip1383">trip1383</option><option value="trip1384">trip1384</option><option value="trip1385">trip1385</option><option value="trip1386">trip1386</option><option value="trip1387">trip1387</option><option value="trip1388">trip1388</option><option value="trip1389">trip1389</option><option value="trip1390">trip1390</option><option value="trip1391">trip1391</option><option value="trip1392">trip1392</option><option value="trip1393">trip1393</option><option value="trip1394">trip1394</option><option value="trip1395">trip1395</option><option value="trip1396">trip1396</option><option value="trip1397">trip1397</option><option value="trip1398">trip1398</option><option value="trip1399">trip1399</option><option value="trip1400">trip1400</option><option value="trip1401">trip1401</option><option value="trip1402">trip1402</option><option value="trip1403">trip1403</option><option value="trip1404">trip1404</option><option value="trip1405">trip1405</option><option value="trip1406">trip1406</option><option value="trip1407">trip1407</option><option value="trip1408">trip1408</option><option value="trip1409">trip1409</option><option value="trip1410">trip1410</option><option value="trip1411">trip1411</option><option value="trip1412">trip1412</option><option value="trip1413">trip1413</option><option value="trip1414">trip1414</option><option value="trip1415">trip1415</option><option value="trip1416">trip1416</option><option value="trip1417">trip1417</option><option value="trip1418">trip1418</option><option value="trip1419">trip1419</option><option value="trip1420">trip1420</option><option value="trip1421">trip1421</option><option value="trip1422">trip1422</option><option value="trip1423">trip1423</option><option value="trip1424">trip1424</option><option value="trip1425">trip1425</option><option value="trip1426">trip1426</option><option value="trip1427">trip1427</option><option value="trip1428">trip1428</option><option value="trip1429">trip1429</option><option value="trip1430">trip1430</option><option value="trip1431">trip1431</option><option value="trip1432">trip1432</option><option value="trip1433">trip1433</option><option value="trip1434">trip1434</option><option value="trip1435">trip1435</option><option value="trip1436">trip1436</option><option value="trip1437">trip1437</option><option value="trip1438">trip1438</option><option value="trip1439">trip1439</option><option value="trip1440">trip1440</option><option value="trip1441">trip1441</option><option value="trip1442">trip1442</option><option value="trip1443">trip1443</option><option value="trip1444">trip1444</option><option value="trip1445">trip1445</option><option value="trip1446">trip1446</option><option value="trip1447">trip1447</option><option value="trip1448">trip1448</option><option value="trip1449">trip1449</option><option value="trip1450">trip1450</option><option value="trip1451">trip1451</option><option value="trip1452">trip1452</option><option value="trip1453">trip1453</option><option value="trip1454">trip1454</option><option value="trip1455">trip1455</option><option value="trip1456">trip1456</option><option value="trip1457">trip1457</option><option value="trip1458">trip1458</option><option value="trip1459">trip1459</option><option value="trip1460">trip1460</option><option value="trip1461">trip1461</option><option value="trip1462">trip1462</option><option value="trip1463">trip1463</option><option value="trip1464">trip1464</option><option value="trip1465">trip1465</option><option value="trip1466">trip1466</option><option value="trip1467">trip1467</option><option value="trip1468">trip1468</option><option value="trip1469">trip1469</option><option value="trip1470">trip1470</option><option value="trip1471">trip1471</option><option value="trip1472">trip1472</option><option value="trip1473">trip1473</option><option value="trip1474">trip1474</option><option value="trip1475">trip1475</option><option value="trip1476">trip1476</option><option value="trip1477">trip1477</option><option value="trip1478">trip1478</option><option value="trip1479">trip1479</option><option value="trip1480">trip1480</option><option value="trip1481">trip1481</option><option value="trip1482">trip1482</option><option value="trip1483">trip1483</option><option value="trip1484">trip1484</option><option value="trip1485">trip1485</option><option value="trip1486">trip1486</option><option value="trip1487">trip1487</option><option value="trip1488">trip1488</option><option value="trip1489">trip1489</option><option value="trip1490">trip1490</option></select>
+        </div>  
+        <div class="panel panel-default">
+          <div class="panel-heading text-center">Trip Data</div>
+          <table class="table table-condensed table-bordered">
+            <tbody><tr>
+              <td>
+                <span class="dados">Cost</span>
+              </td>
+              <td>
+                <span id="trip_cost"></span>
+              </td>
+            </tr> 
+            <tr>
+              <td> 
+                <span class="dados"># Gifts</span>
+              </td>
+              <td>
+                <span id="trip_size"></span>
+              </td>
+            </tr> 
+            <tr>
+              <td> 
+                <span class="dados">Length</span>
+              </td>
+              <td>
+                <span id="trip_length"></span>
+              </td>
+            </tr> 
+            <tr>
+              <td> 
+                <span class="dados">Weight</span>
+              </td>
+              <td>
+                <span id="trip_weight"></span>
+              </td>
+            </tr> 
+          </tbody></table>
+        </div> <!--END panel panel-default-->
+      </div> <!-- end col-md-4 -->
+
+      <div class="col-md-9">
+        <div class="panel grafo panel-default">
+          <div class="panel-heading">
+
+            <div class="row">
+              <div class="col-md-4"></div>
+              <div class="col-md-4 text-center map-title">World Map</div>
+
+
+              <div class="col-md-4">
+                <div class="pull-right">
+                  <span>Projection:</span>
+                  <select id="map_selector">
+                    <option value="equalarea">equalarea</option>
+                    <option value="equidistant">equidistant</option>
+                    <option value="gnomonic">gnomonic</option>
+                    <option value="orthographic" selected="">orthographic</option>
+                    <option value="stereographic">stereographic</option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div id="geo" class="panel-body">          
+          </div> 
+
+          <div class="pull-right legenda">
+            <span>Drag to rotate the origin</span> 
+            <span>Scroll to zoom</span>  
+          </div> 
+        </div>  
+      </div>  
+    </div> <!--END row-->
+  </div> <!--END container-->			
+        
+<script type="text/javascript">
+
+var nRoutes = [];
+nRoutes['sol_1'] = [1490];
+//$("#solselector").val($("#solselector option:first").val());
+//fill_trips();
+
+function fill_trips() {
+  var sol = $("#solselector").find(":selected").text();
+  var n = sol.replace('sol_','');
+
+  $("#tripselector").html('');
+ // var pasta_inst = $("#lista_inst").find(":selected").text();
+ for (i = 1, len = nRoutes[sol]; i <= len; i++) { 
+   $("#tripselector").append("<option value='trip".concat(i,"'>trip",i,"</option>"));
+ }
+}
+
+var feature;
+var feature2;
+
+var scaleValue = 380;
+
+$('#geo').height($( window ).height()*0.8);
+
+var projection = d3.geo.azimuthal()
+.scale(scaleValue)
+.origin([0,90])
+.mode("orthographic")
+.translate([$('#geo').width()/2, $('#geo').height()/2]);
+
+//.translate([640, 400]);
+
+var circle = d3.geo.greatCircle()
+.origin(projection.origin());
+
+// TODO fix d3.geo.azimuthal to be consistent with scale
+var scale = {
+  orthographic: 380,
+  stereographic: 380,
+  gnomonic: 380,
+  equidistant: 380 / Math.PI * 2,
+  equalarea: 380 / Math.SQRT2
+};
+
+var path = d3.geo.path()
+.projection(projection);
+
+var svg = d3.select("#geo").append("svg:svg")
+.attr("id", "svg")
+.attr("width", $('#geo').width())
+.attr("height", $('#geo').height())
+.on("mousedown", mousedown);
+
+$('svg').width( $('#geo').width() );
+$('svg').height( $('#geo').height() );
+
+//.attr("width", 1280)
+//.attr("height", 800)
+
+// var backgroundCircle = svg.selectAll("path")
+//       .data("dM 423, 139 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0","")
+//       .enter()
+//       .append("svg:path")
+//       .attr('class', 'globe')
+//       .attr("d", clip);
+
+d3.json("world-countries.json", function(collection) {
+  console.log(collection);
+  feature = svg.selectAll("path")
+  .data(collection.features,function(d){return d.id;})
+  .enter().append("svg:path")
+  .attr("d", clip);
+
+  feature.append("svg:title")
+  .text(function(d) { return d.properties.name; });  
+
+  feature = svg.selectAll("path");
+});
+
+console.log($('#geo').width()/2);
+console.log($('#geo').height()/2);
+
+   //   .attr('cx', $('#geo').width()/2)
+   //   .attr('cy', $('#geo').height()/2)
+  //    .attr('r', projection.scale())
+
+feature = svg.selectAll("path");
+
+function loadAllPoints() {  
+  //"gifts.json" is the first bugged inverted json that i generated
+  //gifts2.json" is just a few points, no weight attribure
+  //gifts3.json" is all points, no weight attribure
+  //gifts4.json" is all points and the North Pole, with weight attribute
+  //gifts5.json" is 1000 points and the North Pole, with weight attribute
+  d3.json("gifts.json", function(collection) {
+    feature = svg.selectAll("path")
+    .data(collection.features,function(d){return d.id;})
+    .enter().append("svg:path")
+    .attr("style", function(d) { return color_scale(d.properties.weight);})
+    .attr("class", "point")
+    .attr("d", clip);
+
+    
+    feature.append("svg:title")
+    .text(function(d) { return d.properties.name + "\n" + d.properties.weight  + "\n" + d.geometry.coordinates[1] + "\n" + d.geometry.coordinates[0]; });
+
+    feature = svg.selectAll("path");
+
+  });
+
+
+}
+
+function loadAllRoutes() {  
+
+  var sol = $("#solselector").find(":selected").text();
+  var n = sol.replace('sol_','');
+
+ for (i = 1, len = nRoutes[sol]; i <= len; i++) { 
+   
+  var tripfile = "solutions/"+sol+"/trips/trip" + i +".json";
+
+  d3.json(tripfile, function(collection) {       
+        feature = svg.selectAll("path")
+        .data(collection.features,function(d){return d.id;})
+        .enter().append("svg:path")
+        .attr("class", "trip")
+        .attr("d", clip);
+        
+        feature.append("svg:title")
+        .text(function(d) { return d.properties.name + "\n" + d.properties.weight; });
+
+        feature = svg.selectAll("path");
+
+      });
+  }
+
+}
+
+d3.select(window)
+.on("mousemove", mousemove)
+.on("mouseup", mouseup);
+
+d3.select("#geo")
+.on("mousewheel", mousewheel);
+
+d3.select("#map_selector").on("change", function() {
+  projection.mode(this.value).scale(scale[this.value]);
+  refresh(750);
+});
+
+var m0,
+o0;
+
+function mousedown() {
+  m0 = [d3.event.pageX, d3.event.pageY]; //started dragging in m0
+  o0 = projection.origin();
+  d3.event.preventDefault();
+}
+
+function mousemove() {
+  if (m0) {
+    var m1 = [d3.event.pageX, d3.event.pageY], //where the mouse dragging headed
+        o1 = [o0[0] + (m0[0] - m1[0]) / 8, o0[1] + (m1[1] - m0[1]) / 8]; // x_o1 = x_o0 + (x_m0 - x_m1)/8  // y_o1 = y_o0 + (y_m0 - y_m1)/8 
+    projection.origin(o1); //atualiza a origem
+    circle.origin(o1);
+    refresh();
+  }
+}
+
+function mouseup() {
+  if (m0) {
+    mousemove();
+    m0 = null; //ended dragging
+  }
+}
+
+var scaleDownLimit = 0;
+var scaleUpLimit = 10000;
+
+function mousewheel() {
+  scaleValue -= event.deltaY*2;
+  if (scaleValue < scaleDownLimit) {scaleValue = scaleDownLimit};
+  if (scaleValue > scaleUpLimit) {scaleValue = scaleUpLimit};
+  projection.scale(scaleValue);
+  //console.log(scaleValue);
+  refresh();
+}
+
+function refresh(duration) {
+  (duration ? feature.transition().duration(duration) : feature).attr("d", clip);
+  //(duration ? feature2.transition().duration(duration) : feature2).attr("d", clip);
+}
+
+function clip(d) {
+  return path(circle.clip(d));
+}
+
+$("#loadpoints").click(function() {
+  svg.selectAll("path.point").remove();
+  loadAllPoints();
+});
+
+$("#loadtrips").click(function() {
+  svg.selectAll("path.trip").remove();
+  loadAllRoutes();
+});
+
+$("#cleartrips").click(function() {
+  svg.selectAll("path.trip").remove(); 
+  svg.selectAll("path.point").remove();
+});
+
+
+$("#tripselector").change(function() {
+   loadRoute();
+   preencheTrip();
+});
+
+ $("#solselector").change(function() {
+  preencheSol();
+  fill_trips();
+  loadRoute();
+  preencheTrip();
+ });
+
+
+function color_scale(weight)
+{
+  var minValue=0;
+  var maxValue=255;
+
+  var minWeight = 1;
+  var maxWeight = 50;
+  
+  var red;
+  // console.log(weight);
+  red = Math.round(maxValue - ((weight-minWeight)/(maxWeight-minWeight))*(maxValue-minValue));
+ // console.log(red);
+ return "fill: rgb(255,"+red+","+red+")";
+}
+
+
+function loadRoute() {
+  var sol = $("#solselector").find(":selected").text();
+  var tripfile = $("#tripselector").find(":selected").text();
+  svg.selectAll("path.trip").remove(); 
+  svg.selectAll("path.point").remove();
+
+  if (tripfile != "") {
+    var pointsfile = "solutions/"+sol+"/points/points_" + tripfile +".json";
+    var tripfile = "solutions/"+sol+"/trips/" + tripfile +".json";
+      
+
+      d3.json(tripfile, function(collection) {
+        feature = svg.selectAll("path")
+        .data(collection.features,function(d){return d.id;})
+        .enter().append("svg:path")
+        .attr("class", "trip")
+        .attr("d", clip);
+        
+        feature.append("svg:title")
+        .text(function(d) { return d.properties.name + "\n" + d.properties.weight; });
+
+        d3.json(pointsfile, function(collection) {
+          feature = svg.selectAll("path")
+          .data(collection.features,function(d){return d.id;})
+          .enter().append("svg:path")
+          .attr("class", "point")
+          .attr("style", function(d) { return color_scale(d.properties.weight);})
+          .attr("d", clip);
+
+          feature.append("svg:title")
+          .text(function(d) { return d.properties.name + "\n" + d.properties.weight + "\n" + d.geometry.coordinates[1] + "\n" + d.geometry.coordinates[0]; });
+
+          feature = svg.selectAll("path");
+        });
+      });
+    };
+}
+
+function preencheSol() {
+  pasta = $("#solselector").find(":selected").text();
+  var request = $.ajax({
+    cache: false,
+    url: "solutions/".concat(pasta,"/solutiondata.json"),
+    dataType:'json',
+    error: function() {
+      $('#sol_cost').text("");
+      $('#num_trips').text("");      
+    },
+    success: function(dados) {
+      var sol_cost = dados.sol_cost;
+      $('#sol_cost').text(sol_cost.toLocaleString());
+      $('#num_trips').text(dados.num_trips); 
+    }
+  });
+}
+
+function preencheTrip() {
+  var sol = $("#solselector").find(":selected").text();
+  var tripfile = $("#tripselector").find(":selected").text();
+
+  tripfile = "solutions/"+sol+"/trips/" + tripfile +"_data.json";
+
+  var request = $.ajax({
+    cache: false,
+    url: tripfile,
+    dataType:'json',
+    error: function() {
+      $('#trip_cost').text("");
+      $('#trip_length').text("");  
+      $('#trip_size').text("");  
+      $('#trip_weight').text("");      
+    },
+    success: function(dados) {
+      $('#trip_cost').text(dados.trip_cost.toLocaleString());
+      $('#trip_length').text(dados.trip_length);  
+      $('#trip_size').text(dados.trip_size);  
+      $('#trip_weight').text(dados.trip_weight); 
+    }
+  });
+}
+
+
+</script>
+
+
+
+</body></html>
