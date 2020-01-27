@@ -323,7 +323,7 @@ function loadAllRoutes() {
 
  for (i = 1, len = nRoutes[sol]; i <= len; i++) { 
    
-  var tripfile = "../assets/solutions/"+sol+"/trips/trip" + i +".json";
+  var tripfile = "../assets/solutions/"+sol+"/Trips/trip" + i +".json";
 
   d3.json(tripfile, function(collection) {       
         feature = svg.selectAll("path")
@@ -453,8 +453,8 @@ function loadRoute() {
   svg.selectAll("path.point").remove();
 
   if (tripfile != "") {
-    var pointsfile = "../assets/solutions/"+sol+"/points/points_" + tripfile +".json";
-    var tripfile = "../assets/solutions/"+sol+"/trips/" + tripfile +".json";
+    var pointsfile = "../assets/solutions/"+sol+"/Points/points_" + tripfile +".json";
+    var tripfile = "../assets/solutions/"+sol+"/Trips/" + tripfile +".json";
       
 
       d3.json(tripfile, function(collection) {
@@ -506,7 +506,7 @@ function preencheTrip() {
   var sol = $("#solselector").find(":selected").text();
   var tripfile = $("#tripselector").find(":selected").text();
 
-  tripfile = "../assets/solutions/"+sol+"/trips/" + tripfile +"_data.json";
+  tripfile = "../assets/solutions/"+sol+"/Trips/" + tripfile +"_data.json";
 
   var request = $.ajax({
     cache: false,
