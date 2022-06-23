@@ -1,5 +1,5 @@
 @import url("http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700");
-@import url("font-awesome.min.css");
+@import url("fontawesome.min.css");
 
 /*
 	Miniport by HTML5 UP
@@ -1070,7 +1070,7 @@
 		.\-1u\28mobile\29 {
 			margin-left: 8.33333%;
 		}
-    
+
     section.height10 {
       height: auto;
     }
@@ -1149,7 +1149,7 @@
 		text-decoration: none;
 		color: inherit;
 	}
-	
+
 	h2, h3, h4, h5, h6 {
 		font-weight: 700;
 	}
@@ -1484,7 +1484,7 @@
 				}
 
 				ul.social li a.fa-linkedin {
-					background-color: #006599;					
+					background-color: #006599;
 				}
 
 				ul.social li a.fa-tumblr {
@@ -1731,22 +1731,22 @@
 			}
 
 /* bibtex */
-  
+
   a.bibtex-link {
 		text-decoration: none;
 		color: inherit;
 	}
-	
+
   ul.bibtex-list {
 		list-style: square;
     line-height: 1.5em;
 	}
-  
+
   ol.bibtex-list {
 		list-style: decimal;
     line-height: 1.5em;
 	}
-  
+
   li.bibtex-list {
     padding-bottom: 5px;
 	}
