@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Santa's 2022 Visualizer</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
+</head>
+<body>
+<div style="margin-bottom: 10px;">
+    <label for="csv">Update submission.csv:</label>
+    <input id="csv" type="file" accept=".csv" style="margin-left: 10px;"><br>
+    <label for="scale">Plot scale (<span id="current_scale">1</span>x):</label>
+    <input type="range" id="scale" min="1" max="10" value="1" onchange="rescale()">
+    <label for="framerate">Pixels per second (<span id="current_framerate">60</span> fps):</label>
+    <input type="range" id="framerate" min="1" max="300" value="60" step="1" onchange="update_framerate()"><br>
+    <span>Cost:</span><span id="cost"></span> (Increase: <span id="arm_cost"></span> + <span
+        id="color_cost"></span>)<br>
+    <span>Pixel:</span><span id="pixel"></span><span>/66049</span>
+</div>
+
+</body>
+<script type="text/javascript" src="visualization.js"></script>
+
+</html>
