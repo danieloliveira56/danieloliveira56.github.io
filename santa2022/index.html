@@ -15,7 +15,7 @@
     <div class="input-group mt-1 w-50">
         <label for="scaling_factor" class="input-group-text">Plot scale (<span id="current_scale">1</span>x)</label>
         <input type="button" class="btn btn-outline-primary px-3" value="-" onclick="decrease_scale()">
-        <input class="mx-1" type="range" id="scaling_factor" min="1" max="10" value="1" onchange="rescale()">
+        <input class="mx-1" type="range" id="scaling_factor" min="1" max="50" value="1" onchange="rescale()">
         <input type="button" class="btn btn-outline-primary px-3" value="+" onclick="increase_scale()">
     </div>
     <div class="input-group mt-1">
@@ -40,11 +40,6 @@
         <input type="button" id="pause_btn" class="btn btn-outline-primary" value="Pause" onclick="pause()">
         <input type="button" id="reset_btn" class="btn btn-primary" value="Reset" onclick="reset()">
     </div>
-    <div id="pixel_position"></div>
-    <p class="text mt-1">
-        <span>Cost:</span><span id="cost"></span> (Increase: <span id="arm_cost"></span> + <span
-            id="color_cost"></span>)
-    </p>
     <div id="canvas" class="mx-auto mt-3"></div>
 </div>
 </body>

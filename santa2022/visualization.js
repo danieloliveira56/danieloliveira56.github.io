@@ -2,14 +2,13 @@ let idx = 0;
 let submission;
 let image_csv;
 let previous_config;
-let scaling_factor = 1;
+let scaling_factor = 3;
 let fps = 60;
 let ppf = 10;
-let cost = 0;
+let speed = 10;
 let previous_r;
 let previous_g;
 let previous_b;
-let speed = 10;
 let previous_pixels;
 let arm_colors;
 let paused;
@@ -36,10 +35,14 @@ function load_submission(submission_file) {
 function setup() {
     var plot = createCanvas(257 * scaling_factor, 257 * scaling_factor);
     image_canvas = createGraphics(257 * scaling_factor, 257 * scaling_factor);
+    arm_canvas = createGraphics(257 * scaling_factor, 257 * scaling_factor);
+    text_canvas = createGraphics(257 * scaling_factor, 257 * scaling_factor);
 
     plot.parent("canvas");
     image_canvas.parent("canvas");
-
+    arm_canvas.parent("canvas");
+    text_canvas.parent("canvas");
+    text_canvas.textSize(28);
     background(220);
     strokeWeight(2);
 
@@ -86,31 +89,6 @@ function get_image_rgb(x, y) {
     return [r, g, b]
 }
 
-function calculate_cost(config1, config2) {
-    if (!config1)
-        return [0, 0];
-
-    let arm_cost = 0;
-    let color_cost = 0;
-
-    for (let j = 0; j < config2.length; j++) {
-        if (config1[j] != config2[j])
-            arm_cost++;
-    }
-
-    [previous_x, previous_y] = config_to_cartesian(config1);
-    [x, y] = config_to_cartesian(config2);
-
-    [r, g, b] = get_image_rgb(previous_x, previous_y);
-    [previous_r, previous_g, previous_b] = get_image_rgb(x, y);
-
-    color_cost += 3 * Math.abs(r - previous_r);
-    color_cost += 3 * Math.abs(g - previous_g);
-    color_cost += 3 * Math.abs(b - previous_b);
-
-    return [arm_cost, color_cost];
-}
-
 function draw_config(config) {
     let x_config;
     let y_config;
@@ -148,31 +126,45 @@ function draw_arm(config) {
         y -= int(config_y);
         arm_pts.push([x,y]);
     }
-
-    scale(scaling_factor);
-    strokeWeight(1/scaling_factor);
+    arm_canvas.clear();
+    arm_canvas.strokeWeight(1/scaling_factor);
+    arm_canvas.scale(scaling_factor);
     for (let j = 1; j < arm_pts.length; j++) {
-        stroke(arm_colors[j - 1]);
-        line(arm_pts[j - 1][0], arm_pts[j - 1][1], arm_pts[j][0], arm_pts[j][1]);
+        arm_canvas.stroke(arm_colors[j - 1]);
+        arm_canvas.line(arm_pts[j - 1][0], arm_pts[j - 1][1], arm_pts[j][0], arm_pts[j][1]);
+    }
+    arm_canvas.scale(1/scaling_factor);
+
+    image(arm_canvas, 0, 0);
+}
+
+function draw_textbox() {
+    let x = Math.trunc(mouseX / scaling_factor);
+    let y = Math.trunc(mouseY / scaling_factor);
+    text_canvas.clear();
+    if (mouseX > 0 &&  mouseX < width && mouseY > 0 && mouseY < height) {
+        [r, g, b] = get_image_rgb(x, y);
+        let pixel_str = "(" + x + ", " + y + ", " + Math.round(r * 100) / 100 + ", " + Math.round(g * 100) / 100 + ", " + Math.round(b * 100) / 100 + ")";
+        let text_x = min(x*scaling_factor+scaling_factor, 257 * scaling_factor - text_canvas.textWidth(pixel_str));
+        let text_y = max(y*scaling_factor, 12);
+        text_canvas.fill(0);
+        text_canvas.text(pixel_str, text_x, text_y);
+        noCursor();
+        text_canvas.noFill();
+        text_canvas.square(x*scaling_factor, y*scaling_factor, scaling_factor);
     }
 }
 
+
 function draw() {
     background(220);
-//    let x = round(mouseX / scaling_factor);
-    let x = Math.ceil(mouseX / scaling_factor);
-//    let y = round(mouseY / scaling_factor);
-    let y = Math.ceil(mouseY / scaling_factor);
-    if (x >= 0 &&  x <= 257 && y >= 0 && y <= 257) {
-        document.getElementById("pixel_position").textContent = "(" + mouseX / scaling_factor + ", " + y + ")";
-        let pixel_str = "(" + x + ", " + y + ")";
-        let text_x = min(mouseX + 10, 257 * scaling_factor - textWidth(pixel_str));
-        let text_y = max(mouseY - 10, 12);
-        text(pixel_str, text_x, text_y);
-        console.log(pixel_str, text_x, text_y);
-    }
+    draw_textbox();
+
+
     if (!submission || paused || idx >= submission.length) {
         image(image_canvas, 0, 0);
+        image(arm_canvas, 0, 0);
+        image(text_canvas, 0, 0);
         return;
     }
 
@@ -184,19 +176,9 @@ function draw() {
 
     post_pixel_drawing(last_idx);
 
-    update_cost();
+    image(text_canvas, 0, 0);
 
     idx += speed;
-}
-
-function update_cost() {
-//    [arm_cost, color_cost] = calculate_cost(submission[idx-1], submission[idx]);
-//    cost += arm_cost + color_cost;
-//
-//    document.getElementById("cost").textContent = Math.round(cost * 100) / 100;
-//    document.getElementById("arm_cost").textContent = arm_cost;
-//    document.getElementById("color_cost").textContent = Math.round(color_cost * 100) / 100;
-//    document.getElementById("pixel").textContent = idx + 1;
 }
 
 function rescale() {
@@ -204,6 +186,8 @@ function rescale() {
     document.getElementById("current_scale").textContent = scaling_factor;
     resizeCanvas(257 * scaling_factor, 257 * scaling_factor);
     image_canvas.resizeCanvas(257 * scaling_factor, 257 * scaling_factor);
+    arm_canvas.resizeCanvas(257 * scaling_factor, 257 * scaling_factor);
+    text_canvas.resizeCanvas(257 * scaling_factor, 257 * scaling_factor);
     reset();
 }
 
@@ -250,8 +234,6 @@ function post_pixel_drawing(pixel_idx) {
     document.getElementById("current_pixel").textContent = pixel_idx;
     document.getElementById("pixel").value = pixel_idx;
 
-//    updatePixels();
-//    previous_pixels = pixels;
     draw_arm(submission[pixel_idx]);
 }
 
@@ -304,6 +286,9 @@ function reset() {
     }
     idx = 0;
     background(220);
+    image_canvas.clear();
+    arm_canvas.clear();
+    text_canvas.clear();
 }
 
 let fileInput = document.getElementById("csv");
