@@ -18,7 +18,7 @@ function preload() {
     loadTable('image.csv', 'csv', 'header', (table) => {
         image_csv = table;
     });
-    load_submission('submission82425.csv');
+    load_submission('submission.csv');
 }
 
 function load_submission(submission_file) {
